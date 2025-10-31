@@ -1,0 +1,26 @@
+body {
+  background-color: #1d2d44; /* fundo azul escuro */
+  font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  background-color: #f0ebd8; /* tom areia claro */
+  width: 90%;
+  max-width: 1100px;
+  margin: 40px auto;
+  border-radius: 16px;
+  padding: 20px 30px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
+}
+
+
+h1 {
+  font-size: 1.8rem;
+  color: #1d2d44;
+  margin-top: 25px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+

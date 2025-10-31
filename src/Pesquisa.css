@@ -1,0 +1,29 @@
+.form-pesquisa {
+  text-align: center;
+}
+
+.campo-pesquisa {
+  font-size: 14px;
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid gray;
+  width: 400px;
+}
+
+.campo-pesquisa:focus {
+  border-color: rgb(105, 105, 226);
+  box-shadow: 0 0 0 3px rgba(128, 128, 210, 0.2);
+  outline: none;
+}
+
+.btn-pesquisa {
+  padding: 12px;
+  border: 0;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 8px;
+  background-color: rgb(135, 27, 236);
+  margin-left: 8px;
+}

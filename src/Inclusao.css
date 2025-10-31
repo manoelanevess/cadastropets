@@ -1,0 +1,25 @@
+.form-inclusao {
+  text-align: center;
+}
+
+.form-inclusao input,
+.form-inclusao textarea {
+  font-size: 14px;
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid gray;
+  width: 400px;
+  margin-top: 6px;
+}
+
+.btn-inclusao {
+  padding: 12px;
+  border: 0;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 8px;
+  background-color: rgb(135, 27, 236);
+  margin-top: 10px;
+}
