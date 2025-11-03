@@ -1,15 +1,74 @@
 {
   "pets": [
     {
-      "id": "bb45",
+      "id": "d871",
       "nome": "Mia",
       "especie": "gato",
-      "idade": "5",
+      "idade": 5,
       "imagem": "https://adimax.com.br/wp-content/uploads/2022/12/gata-no-cio.jpg",
-      "descricao": "carinhosa e brincalhona ",
+      "descricao": "pelagem branca com cinza e olhos verdes",
       "nomes": [],
       "comentarios": [],
-      "notas": []
+      "notas": [],
+      "tarefas": [
+        {
+          "descricao": "pet shop",
+          "data": "2025-11-04T18:00",
+          "feito": false
+        }
+      ],
+      "sexo": "Fêmea",
+      "castrado": "Sim"
+    },
+    {
+      "id": "317a",
+      "nome": "Juninho",
+      "especie": "Cachorro",
+      "idade": 3,
+      "imagem": "https://www.patasdacasa.com.br/sites/default/files/2024-12/pinscher%20capa.jpg",
+      "descricao": "Pinsher marrom com preto",
+      "nomes": [],
+      "comentarios": [],
+      "notas": [],
+      "tarefas": [
+        {
+          "descricao": "passeio",
+          "data": "2025-11-04T14:00",
+          "feito": false
+        },
+        {
+          "descricao": "pet shop",
+          "data": "2025-11-12T15:00",
+          "feito": false
+        }
+      ],
+      "sexo": "Macho",
+      "castrado": "Não"
+    },
+    {
+      "id": "f647",
+      "nome": "Oliver",
+      "especie": "gato",
+      "idade": 7,
+      "imagem": "https://blog-static.petlove.com.br/wp-content/uploads/2018/04/persa.png",
+      "descricao": "Persa cinza e branco",
+      "nomes": [],
+      "comentarios": [],
+      "notas": [],
+      "sexo": "Macho",
+      "castrado": "Não"
+    },
+    {
+      "id": "ed12",
+      "nome": "Pitu",
+      "especie": "Papagaio",
+      "idade": 1,
+      "imagem": "https://segredosdomundo.r7.com/wp-content/uploads/2022/04/conheca-o-papagaio-verdadeiro-um-dos-animais-mais-traficados-no-brasil-e1649945185556.jpg",
+      "descricao": "Papagaio verde",
+      "nomes": [],
+      "comentarios": [],
+      "notas": [],
+      "sexo": "Macho"
     }
   ]
 }

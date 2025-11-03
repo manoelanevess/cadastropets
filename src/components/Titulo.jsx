@@ -5,15 +5,15 @@ export default function Titulo() {
   return (
     <>
       <header>
-       <div className="divHeader">
-        <div className="divImage">
-          <img className="logoImage" src="./logovazia.png" alt="Logo Pets" />
+        <div className="divHeader">
+          <div className="divImage">
+            <img className="logoImage" src="./logovazia.png" alt="Logo PetNotes" />
+          </div>
+          <div className="title">
+            <h1>PetNotes</h1>
+            <h2>Organize e cuide dos seus pets</h2>
+          </div>
         </div>
-        <div className="title">
-          <h1>AdoPet</h1>
-          <h2>Adote e compartilhe</h2>
-        </div>
-      </div>
       </header>
       <nav>
         <Link to="/" className='links'>Home</Link>&nbsp;&nbsp;
@@ -21,5 +21,5 @@ export default function Titulo() {
         <Link to="/pesquisa" className='links'>Pesquisa</Link>
       </nav>
     </>
-  )
+  );
 }

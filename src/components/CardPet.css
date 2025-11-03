@@ -1,85 +1,88 @@
 .cards {
-  background: #ffffff;
+  display: flex;
+  background: #fff;
   border-radius: 18px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   margin: 25px auto;
   padding: 20px;
-  max-width: 850px;
-  display: flex;
-  gap: 25px;
-  transition: all 0.3s ease;
+  max-width: 900px;
+  transition: 0.3s;
 }
 
 .cards:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
 }
 
-.divpet {
+.card-esquerda img {
+  width: 250px;
+  height: 230px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.card-direita {
+  flex: 1;
+  margin-left: 25px;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+}
+
+.info-e-tarefas {
+  display: flex;
   justify-content: space-between;
+  gap: 30px;
 }
 
-.cards img {
-  width: 320px;
-  height: 280px;
-  object-fit: cover;
-  border-radius: 14px;
+.info-pet {
+  flex: 1;
 }
 
-.cards h3 {
-  margin: 0;
-  font-size: 1.7rem;
-  color: #1d2d44;
-  font-weight: 700;
+.tarefas-lado {
+  width: 45%;
+  background-color: #f9fafb;
+  border-radius: 12px;
+  padding: 12px 16px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
 
-.cards h4 {
-  margin: 8px 0;
-  color: #3e5c76;
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.p-desc {
-  color: #333;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin-bottom: 15px;
+.botoes-card {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
 }
 
 .btn-avaliar {
   background-color: #3e5c76;
   color: #f0ebd8;
-  font-weight: bold;
-  font-size: 14px;
+  border: none;
   padding: 10px 18px;
   border-radius: 10px;
-  border: none;
   cursor: pointer;
-  transition: 0.3s ease;
+  font-weight: bold;
 }
 
-.btn-avaliar:hover {
+.btn-editar {
   background-color: #748cab;
-  color: #1d2d44;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
-/* .estrelas-link {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 14px;
-} */
-
-/* .divnew {
-  margin-bottom: 10px;
-} */
-
-.new {
-  width: 610px;
-  height: 100px; 
-
+.btn-excluir {
+  background-color: #d33;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
 }
+
+.btn-excluir:hover { background-color: #ff4c4c; }
+.btn-editar:hover { background-color: #5f7b9d; }
+.btn-avaliar:hover { background-color: #536b8a; }

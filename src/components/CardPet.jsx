@@ -1,102 +1,159 @@
-import Swal from 'sweetalert2'
 import './CardPet.css'
-import withReactContent from "sweetalert2-react-content"
-import { useForm } from "react-hook-form"
-import Estrelas from './Estrelas'
-import { Link } from 'react-router-dom'
-
-const MySwal = withReactContent(Swal)
+import { useState } from 'react'
+import TarefasPet from './TarefasPet'
+import Swal from 'sweetalert2'
 
 function CardPet({ pet, setPets }) {
-  const { register, handleSubmit, reset } = useForm()
+  const [mostrarTarefas, setMostrarTarefas] = useState(false)
 
-  async function enviarComentario(data) {
-    const { nome, comentario, nota } = data
+  function alternarTarefas() {
+    setMostrarTarefas(!mostrarTarefas)
+  }
 
-    const petAlterado = {
-      ...pet,
-      nomes: [...pet.nomes, nome],
-      comentarios: [...pet.comentarios, comentario],
-      notas: [...pet.notas, Number(nota)]
-    }
+  // 🗑️ Excluir pet
+  async function excluirPet() {
+    const confirmar = await Swal.fire({
+      title: `Excluir ${pet.nome}?`,
+      text: "Essa ação não pode ser desfeita!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Sim, excluir",
+      cancelButtonText: "Cancelar"
+    })
 
-    try {
-      const resposta = await fetch(`http://localhost:3001/pets/${pet.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(petAlterado),
-      })
-      if (!resposta.ok) throw new Error("Erro ao incluir avaliação")
-
-      Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Avaliação cadastrada com sucesso 🐾",
-        showConfirmButton: false,
-        timer: 2000,
-      })
-
+    if (confirmar.isConfirmed) {
+      await fetch(`http://localhost:3001/pets/${pet.id}`, { method: "DELETE" })
       const respostaLista = await fetch("http://localhost:3001/pets")
       const dados = await respostaLista.json()
       setPets(dados.reverse())
-    } catch (erro) {
-      console.error("Erro: " + erro.message)
+      Swal.fire({ icon: "success", title: "Pet excluído com sucesso 🐾", timer: 1200, showConfirmButton: false })
     }
-    reset()
   }
 
-  function avaliarPet() {
-    MySwal.fire({
-      title: `Avaliação: ${pet.nome}`,
-      html: (
-        <form onSubmit={handleSubmit(enviarComentario)}
-          style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-        >
-          <input type="text" placeholder="Seu nome"
-            className="swal2-input" style={{ width: 300 }}
-            required {...register("nome")}
-          />
-          <input type="text" placeholder="Comentário"
-            className="swal2-input" style={{ width: 300 }}
-            required {...register("comentario")}
-          />
-          <input type="number" placeholder="Nota (1 a 5)"
-            className="swal2-input" style={{ width: 300 }}
-            min="1" max="5" required {...register("nota")}
-          />
-          <button type="submit" className="swal2-confirm swal2-styled" style={{ marginTop: "20px" }}>
-            Enviar
-          </button>
-        </form>
-      ),
-      showConfirmButton: false,
+  // ✏️ Editar pet
+  async function editarPet() {
+    const { value: valores } = await Swal.fire({
+      title: `Editar informações de ${pet.nome}`,
+      html: `
+        <style>
+          .campo-editar {
+            width: 100%;
+            border: 1px solid #d0d0d0;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            color: #333;
+            margin: 6px 0;
+            background-color: #fff;
+            box-sizing: border-box;
+          }
+          .campo-editar:focus {
+            outline: none;
+            border-color: #748cab;
+            box-shadow: 0 0 0 3px rgba(116,140,171,0.2);
+          }
+        </style>
+
+        <input id="nome" class="campo-editar" placeholder="Nome" value="${pet.nome || ''}">
+        <input id="especie" class="campo-editar" placeholder="Espécie" value="${pet.especie || ''}">
+
+        <select id="sexo" class="campo-editar">
+          <option value="">Selecione o sexo</option>
+          <option value="Macho" ${pet.sexo === "Macho" ? "selected" : ""}>Macho</option>
+          <option value="Fêmea" ${pet.sexo === "Fêmea" ? "selected" : ""}>Fêmea</option>
+        </select>
+
+        <select id="castrado" class="campo-editar">
+          <option value="">Castrado?</option>
+          <option value="Sim" ${pet.castrado === "Sim" ? "selected" : ""}>Sim</option>
+          <option value="Não" ${pet.castrado === "Não" ? "selected" : ""}>Não</option>
+        </select>
+
+        <input id="idade" type="number" class="campo-editar" placeholder="Idade" value="${pet.idade || ''}">
+        <input id="imagem" class="campo-editar" placeholder="URL da imagem" value="${pet.imagem || ''}">
+        <textarea id="descricao" class="campo-editar" placeholder="Descrição">${pet.descricao || ''}</textarea>
+      `,
+      focusConfirm: false,
+      showCancelButton: true,
+      confirmButtonText: "Salvar alterações",
+      cancelButtonText: "Cancelar",
+      preConfirm: () => {
+        return {
+          nome: document.getElementById("nome").value,
+          especie: document.getElementById("especie").value,
+          sexo: document.getElementById("sexo").value,
+          castrado: document.getElementById("castrado").value,
+          idade: Number(document.getElementById("idade").value),
+          imagem: document.getElementById("imagem").value,
+          descricao: document.getElementById("descricao").value
+        }
+      }
     })
-  }
 
-  function calculaMedia() {
-    let soma = 0
-    for (const nota of pet.notas) soma += nota
-    return soma / pet.notas.length
+    if (valores) {
+      const petEditado = { ...pet, ...valores }
+
+      try {
+        const resposta = await fetch(`http://localhost:3001/pets/${pet.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(petEditado)
+        })
+        if (!resposta.ok) throw new Error("Erro ao editar pet")
+
+        Swal.fire({
+          icon: "success",
+          title: "Informações atualizadas com sucesso 🐾",
+          showConfirmButton: false,
+          timer: 1500
+        })
+
+        const respostaLista = await fetch("http://localhost:3001/pets")
+        const dados = await respostaLista.json()
+        setPets(dados.reverse())
+      } catch (erro) {
+        console.error("Erro:", erro.message)
+      }
+    }
   }
 
   return (
     <div className='cards'>
-      <div>
-        <img src={pet.imagem} alt="Foto do pet" />
+      <div className='card-esquerda'>
+        <img src={pet.imagem} alt={`Foto de ${pet.nome}`} />
       </div>
-      <div className='divpet'>
-        <h3>{pet.nome}</h3>
-        <h4>{pet.especie} - {pet.idade} anos</h4>
-        <p className="p-desc">{pet.descricao}</p>
-        <div className="div-botao">
-            {pet.notas.length === 0 && (
-            <img src="./new.png" alt="Novo" className="new" />
-              )}
-            <button className="btn-avaliar" onClick={avaliarPet}>
-                Adotar
-            </button>
-        </div>
 
+      <div className='card-direita'>
+        <div className="info-e-tarefas">
+          <div className="info-pet">
+            <h3>{pet.nome}</h3>
+            {/* 🐾 Exibe espécie, sexo, castrado e idade */}
+            <h4>
+              {pet.especie}
+              {pet.sexo ? ` — ${pet.sexo}` : ""}
+              {pet.castrado ? ` — Castrado: ${pet.castrado}` : ""}
+              {pet.idade ? ` — ${pet.idade} anos` : ""}
+            </h4>
+
+            <p className="p-desc">{pet.descricao}</p>
+
+            <div className="botoes-card">
+              <button className="btn-avaliar" onClick={alternarTarefas}>
+                {mostrarTarefas ? "Fechar Tarefas" : "Adicionar Tarefas"}
+              </button>
+              <button className="btn-editar" onClick={editarPet}>Editar Pet</button>
+              <button className="btn-excluir" onClick={excluirPet}>Excluir Pet</button>
+            </div>
+          </div>
+
+          {mostrarTarefas && (
+            <div className="tarefas-lado">
+              <TarefasPet pet={pet} setPets={setPets} />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

@@ -10,7 +10,8 @@ function Inclusao() {
       ...data,
       nomes: [],
       comentarios: [],
-      notas: []
+      notas: [],
+      tarefas: []
     }
 
     try {
@@ -33,11 +34,29 @@ function Inclusao() {
       <Titulo />
       <h1>Cadastro de Pets 🐶🐱</h1>
       <form className='form-inclusao' onSubmit={handleSubmit(incluirPet)}>
-        <input type="text" placeholder="Nome do pet" {...register("nome")} required />
-        <input type="text" placeholder="Espécie (cachorro, gato...)" {...register("especie")} required />
-        <input type="number" placeholder="Idade" {...register("idade")} required />
-        <input type="text" placeholder="URL da imagem" {...register("imagem")} />
-        <textarea placeholder="Descrição do pet" {...register("descricao")} required></textarea>
+        <div className="form-grid">
+          <input type="text" placeholder="Nome do pet" {...register("nome")} required />
+          <input type="text" placeholder="Espécie (cachorro, gato...)" {...register("especie")} required />
+
+          <select {...register("sexo")} required>
+            <option value="">Selecione o sexo</option>
+            <option value="Macho">Macho</option>
+            <option value="Fêmea">Fêmea</option>
+          </select>
+
+          <input type="number" placeholder="Idade" {...register("idade")} required />
+
+          {/* 🆕 Campo Castrado */}
+          <select {...register("castrado")} required>
+            <option value="">Castrado?</option>
+            <option value="Sim">Sim</option>
+            <option value="Não">Não</option>
+          </select>
+
+          <input type="text" placeholder="URL da imagem" {...register("imagem")} />
+          <textarea placeholder="Descrição do pet" {...register("descricao")} required></textarea>
+        </div>
+
         <input type="submit" value="Cadastrar" className='btn-inclusao' />
       </form>
     </>
