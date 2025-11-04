@@ -3,7 +3,7 @@ import './Inclusao.css'
 import Titulo from './components/Titulo'
 
 function Inclusao() {
-  const { register, handleSubmit, reset } = useForm()
+  const { register, handleSubmit, reset } = useForm() //prepara registro de campo
 
   async function incluirPet(data) {
     const novoPet = {
@@ -12,28 +12,28 @@ function Inclusao() {
       comentarios: [],
       notas: [],
       tarefas: []
-    }
+    } //cria novo pet com dados do formulário
 
     try {
-      const resposta = await fetch("http://localhost:3001/pets", {
+      const resposta = await fetch("http://localhost:3001/pets", { 
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(novoPet)
-      })
-      if (!resposta.ok) throw new Error("Erro ao incluir pet")
+      })  
+      if (!resposta.ok) throw new Error("Erro ao incluir pet") 
 
-      alert("Pet cadastrado com sucesso! 🐾")
-      reset()
-    } catch (erro) {
+      alert("Pet cadastrado com sucesso! 🐾") 
+      reset() 
+    } catch (erro) { 
       console.log("Erro:", erro.message)
-    }
-  }
+    } 
+  }  
 
   return (
     <>
       <Titulo />
-      <h1>Cadastro de Pets 🐶🐱</h1>
-      <form className='form-inclusao' onSubmit={handleSubmit(incluirPet)}>
+      <h1>Cadastro de Pets</h1>
+      <form className="form-inclusao" onSubmit={handleSubmit(incluirPet)}>
         <div className="form-grid">
           <input type="text" placeholder="Nome do pet" {...register("nome")} required />
           <input type="text" placeholder="Espécie (cachorro, gato...)" {...register("especie")} required />
@@ -46,7 +46,6 @@ function Inclusao() {
 
           <input type="number" placeholder="Idade" {...register("idade")} required />
 
-          {/* 🆕 Campo Castrado */}
           <select {...register("castrado")} required>
             <option value="">Castrado?</option>
             <option value="Sim">Sim</option>
@@ -57,7 +56,7 @@ function Inclusao() {
           <textarea placeholder="Descrição do pet" {...register("descricao")} required></textarea>
         </div>
 
-        <input type="submit" value="Cadastrar" className='btn-inclusao' />
+        <input type="submit" value="Cadastrar" className="btn-inclusao" />
       </form>
     </>
   )

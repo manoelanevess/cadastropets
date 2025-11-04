@@ -68,7 +68,14 @@
       "nomes": [],
       "comentarios": [],
       "notas": [],
-      "sexo": "Macho"
+      "sexo": "Macho",
+      "tarefas": [
+        {
+          "descricao": "veterinário",
+          "data": "2025-11-19T15:00",
+          "feito": false
+        }
+      ]
     }
   ]
 }

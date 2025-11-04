@@ -4,39 +4,37 @@ import TarefasPet from './TarefasPet'
 import Swal from 'sweetalert2'
 
 function CardPet({ pet, setPets }) {
-  const [mostrarTarefas, setMostrarTarefas] = useState(false)
+    const [mostrarTarefas, setMostrarTarefas] = useState(false)
 
-  function alternarTarefas() {
-    setMostrarTarefas(!mostrarTarefas)
-  }
-
-  // 🗑️ Excluir pet
-  async function excluirPet() {
-    const confirmar = await Swal.fire({
-      title: `Excluir ${pet.nome}?`,
-      text: "Essa ação não pode ser desfeita!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Sim, excluir",
-      cancelButtonText: "Cancelar"
-    })
-
-    if (confirmar.isConfirmed) {
-      await fetch(`http://localhost:3001/pets/${pet.id}`, { method: "DELETE" })
-      const respostaLista = await fetch("http://localhost:3001/pets")
-      const dados = await respostaLista.json()
-      setPets(dados.reverse())
-      Swal.fire({ icon: "success", title: "Pet excluído com sucesso 🐾", timer: 1200, showConfirmButton: false })
+    function alternarTarefas() {
+        setMostrarTarefas(!mostrarTarefas)
     }
-  }
 
-  // ✏️ Editar pet
-  async function editarPet() {
-    const { value: valores } = await Swal.fire({
-      title: `Editar informações de ${pet.nome}`,
-      html: `
+    async function excluirPet() {
+        const confirmar = await Swal.fire({
+            title: `Excluir ${pet.nome}?`,
+            text: "Essa ação não pode ser desfeita!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sim, excluir",
+            cancelButtonText: "Cancelar"
+        })
+
+        if (confirmar.isConfirmed) {
+            await fetch(`http://localhost:3001/pets/${pet.id}`, { method: "DELETE" })
+            const respostaLista = await fetch("http://localhost:3001/pets")
+            const dados = await respostaLista.json()
+            setPets(dados.reverse())
+            Swal.fire({ icon: "success", title: "Pet excluído com sucesso 🐾", timer: 1200, showConfirmButton: false })
+        }
+    }
+
+    async function editarPet() {
+        const { value: valores } = await Swal.fire({
+            title: `Editar informações de ${pet.nome}`,
+            html: `
         <style>
           .campo-editar {
             width: 100%;
@@ -75,88 +73,87 @@ function CardPet({ pet, setPets }) {
         <input id="imagem" class="campo-editar" placeholder="URL da imagem" value="${pet.imagem || ''}">
         <textarea id="descricao" class="campo-editar" placeholder="Descrição">${pet.descricao || ''}</textarea>
       `,
-      focusConfirm: false,
-      showCancelButton: true,
-      confirmButtonText: "Salvar alterações",
-      cancelButtonText: "Cancelar",
-      preConfirm: () => {
-        return {
-          nome: document.getElementById("nome").value,
-          especie: document.getElementById("especie").value,
-          sexo: document.getElementById("sexo").value,
-          castrado: document.getElementById("castrado").value,
-          idade: Number(document.getElementById("idade").value),
-          imagem: document.getElementById("imagem").value,
-          descricao: document.getElementById("descricao").value
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: "Salvar alterações",
+            cancelButtonText: "Cancelar",
+            preConfirm: () => {
+                return {
+                    nome: document.getElementById("nome").value,
+                    especie: document.getElementById("especie").value,
+                    sexo: document.getElementById("sexo").value,
+                    castrado: document.getElementById("castrado").value,
+                    idade: Number(document.getElementById("idade").value),
+                    imagem: document.getElementById("imagem").value,
+                    descricao: document.getElementById("descricao").value
+                }
+            }
+        })
+
+        if (valores) {
+            const petEditado = { ...pet, ...valores }
+
+            try {
+                const resposta = await fetch(`http://localhost:3001/pets/${pet.id}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(petEditado)
+                })
+                if (!resposta.ok) throw new Error("Erro ao editar pet")
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Informações atualizadas com sucesso 🐾",
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+
+                const respostaLista = await fetch("http://localhost:3001/pets")
+                const dados = await respostaLista.json()
+                setPets(dados.reverse())
+            } catch (erro) {
+                console.error("Erro:", erro.message)
+            }
         }
-      }
-    })
-
-    if (valores) {
-      const petEditado = { ...pet, ...valores }
-
-      try {
-        const resposta = await fetch(`http://localhost:3001/pets/${pet.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(petEditado)
-        })
-        if (!resposta.ok) throw new Error("Erro ao editar pet")
-
-        Swal.fire({
-          icon: "success",
-          title: "Informações atualizadas com sucesso 🐾",
-          showConfirmButton: false,
-          timer: 1500
-        })
-
-        const respostaLista = await fetch("http://localhost:3001/pets")
-        const dados = await respostaLista.json()
-        setPets(dados.reverse())
-      } catch (erro) {
-        console.error("Erro:", erro.message)
-      }
     }
-  }
 
-  return (
-    <div className='cards'>
-      <div className='card-esquerda'>
-        <img src={pet.imagem} alt={`Foto de ${pet.nome}`} />
-      </div>
-
-      <div className='card-direita'>
-        <div className="info-e-tarefas">
-          <div className="info-pet">
-            <h3>{pet.nome}</h3>
-            {/* 🐾 Exibe espécie, sexo, castrado e idade */}
-            <h4>
-              {pet.especie}
-              {pet.sexo ? ` — ${pet.sexo}` : ""}
-              {pet.castrado ? ` — Castrado: ${pet.castrado}` : ""}
-              {pet.idade ? ` — ${pet.idade} anos` : ""}
-            </h4>
-
-            <p className="p-desc">{pet.descricao}</p>
-
-            <div className="botoes-card">
-              <button className="btn-avaliar" onClick={alternarTarefas}>
-                {mostrarTarefas ? "Fechar Tarefas" : "Adicionar Tarefas"}
-              </button>
-              <button className="btn-editar" onClick={editarPet}>Editar Pet</button>
-              <button className="btn-excluir" onClick={excluirPet}>Excluir Pet</button>
+    return (
+        <div className='cards'>
+            <div className='card-esquerda'>
+                <img src={pet.imagem} alt={`Foto de ${pet.nome}`} />
             </div>
-          </div>
 
-          {mostrarTarefas && (
-            <div className="tarefas-lado">
-              <TarefasPet pet={pet} setPets={setPets} />
+            <div className='card-direita'>
+                <div className="info-e-tarefas">
+                    <div className="info-pet">
+                        <h3>{pet.nome}</h3>
+                        <h4>
+                            {pet.especie}
+                            {pet.sexo ? ` — ${pet.sexo}` : ""}
+                            {pet.castrado ? ` — Castrado: ${pet.castrado}` : ""}
+                            {pet.idade ? ` — ${pet.idade} anos` : ""}
+                        </h4>
+
+                        <p className="p-desc">{pet.descricao}</p>
+
+                        <div className="botoes-card">
+                            <button className="btn-avaliar" onClick={alternarTarefas}>
+                                {mostrarTarefas ? "Fechar Tarefas" : "Adicionar Tarefas"}
+                            </button>
+                            <button className="btn-editar" onClick={editarPet}>Editar Pet</button>
+                            <button className="btn-excluir" onClick={excluirPet}>Excluir Pet</button>
+                        </div>
+                    </div>
+
+                    {mostrarTarefas && (
+                        <div className="tarefas-lado">
+                            <TarefasPet pet={pet} setPets={setPets} />
+                        </div>
+                    )}
+                </div>
             </div>
-          )}
         </div>
-      </div>
-    </div>
-  )
+    )
 }
 
 export default CardPet

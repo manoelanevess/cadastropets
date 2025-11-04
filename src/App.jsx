@@ -17,6 +17,7 @@ function App() {
         console.log("Erro:", erro.message);
       }
     }
+
     buscarPets();
   }, []);
 
